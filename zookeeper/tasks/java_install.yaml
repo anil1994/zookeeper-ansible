@@ -1,0 +1,23 @@
+---
+- name: copying java.tar.gz to servers
+  copy:
+    src:  /test/vhosting/integration/java_installation_package/jdk1.8.0_144.tar.gz
+    dest: /Application
+    owner: wasadm
+    group: wasteam
+- name: extract tar.gz  and add as an environment
+  shell: |
+    cd /Application
+    tar xvfz jdk1.8.0_144.tar.gz
+    echo "export JAVA_HOME=/Application/jdk1.8.0_144" >> /home/wasadm/.bash_profile
+    echo "export PATH=/Application/jdk1.8.0_144/bin:/usr/local/bin:/usr/bin:/opt/puppetlabs/bin:/home/wasadm/.local/bin:/home/wasadm/bin" >> /home/wasadm/.bash_profile
+    source /home/wasadm/.bash_profile
+
+- name: Delete java.tar.gz  file
+  file:
+    path: /Application/jdk1.8.0_144.tar.gz
+    state: absent
+  become: yes
+  become_user: root
+  become_method: sudo
+

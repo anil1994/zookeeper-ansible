@@ -1,0 +1,14 @@
+---
+  - hosts: all
+    become: yes
+    become_user: root
+    vars_files:
+    - "../inventories/default/group_vars/cluster.yml"
+    handlers:
+    - import_tasks: ../handlers/main.yaml
+    tasks:
+    - name: install and configure zookeeper
+      include_tasks: "{{ item }}"
+      loop:
+        - ../tasks/java_install.yaml
+        - ../tasks/main.yaml
